@@ -7,18 +7,19 @@
 <meta name="description" content="Scripts, bots, sites, sistemas, APIs, templates, apps e licenças com entrega automática." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   /* ═══════════ DESIGN SYSTEM ═══════════ */
   :root{
     --bg:#0a0a10; --fg:#f4f4f6; --card:rgba(255,255,255,.04); --card-strong:rgba(255,255,255,.06);
     --border:rgba(255,255,255,.09); --muted:#9ca0ab; --primary:#8b5cf6; --primary2:#a78bfa;
     --accent:#22d3ee; --success:#34d399; --danger:#f87171; --amber:#fbbf24; --radius:14px;
-    --shadow:0 8px 30px rgba(0,0,0,.35);
+    --shadow:0 8px 30px rgba(0,0,0,.35); --panel-bg:rgba(7,7,12,.97);
   }
   body.light{
     --bg:#f7f7fa; --fg:#15151c; --card:rgba(255,255,255,.75); --card-strong:rgba(255,255,255,.92);
     --border:rgba(0,0,0,.08); --muted:#6b7280; --primary:#7c3aed; --primary2:#8b5cf6;
-    --accent:#0891b2; --shadow:0 8px 30px rgba(0,0,0,.08);
+    --accent:#0891b2; --shadow:0 8px 30px rgba(0,0,0,.08); --panel-bg:rgba(255,255,255,.98);
   }
   *{margin:0;padding:0;box-sizing:border-box;border-color:var(--border)}
   html{scroll-behavior:smooth}
@@ -234,9 +235,9 @@
   .dl-row .info .dl-sub{font-size:12px;color:var(--muted);display:block;margin-top:3px}
 
   /* ═══════════ DRAWER CARRINHO ═══════════ */
-  #overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);z-index:80;opacity:0;pointer-events:none;transition:.25s}
+  #overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);z-index:80;opacity:0;pointer-events:none;transition:.25s}
   #overlay.show{opacity:1;pointer-events:auto}
-  #cart{position:fixed;top:0;right:0;bottom:0;width:100%;max-width:420px;z-index:90;padding:22px;display:flex;flex-direction:column;transform:translateX(100%);transition:.3s;border-left:1px solid var(--border)}
+  #cart{position:fixed;top:0;right:0;bottom:0;width:100%;max-width:420px;z-index:90;padding:22px;display:flex;flex-direction:column;transform:translateX(100%);transition:.3s;border-left:1px solid var(--border);background:var(--panel-bg)!important}
   #cart.open{transform:none}
   .cart-items{flex:1;overflow:auto;margin:16px 0;display:flex;flex-direction:column;gap:12px}
   .cart-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px}
@@ -250,7 +251,7 @@
   /* ═══════════ MODAL ═══════════ */
   .modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:.2s}
   .modal.show{opacity:1;pointer-events:auto}
-  .modal-box{width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:20px;padding:26px;transform:scale(.96);transition:.2s}
+  .modal-box{width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:20px;padding:26px;transform:scale(.96);transition:.2s;background:var(--panel-bg)!important}
   .modal.show .modal-box{transform:none}
 
   /* busca */
@@ -286,6 +287,44 @@
   .socials a:hover{background:var(--card);color:var(--fg)}
   .copy{border-top:1px solid var(--border);padding:22px 0;text-align:center;font-size:12px;color:var(--muted)}
   .kbd{border:1px solid var(--border);border-radius:5px;padding:1px 6px;font-size:10px;color:var(--muted);font-family:'Geist Mono',monospace}
+
+  /* ═══════════ ADMIN ═══════════ */
+  .adm-gate{max-width:380px;margin:60px auto 0;padding:32px;border-radius:18px;text-align:center}
+  .adm-gate .ic{width:52px;height:52px;border-radius:14px;background:rgba(139,92,246,.16);display:grid;place-items:center;font-size:24px;margin:0 auto 14px}
+  .adm-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px;border-bottom:1px solid var(--border);padding-bottom:12px}
+  .adm-tab{padding:9px 16px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted)}
+  .adm-tab:hover{background:var(--card)}
+  .adm-tab.active{background:rgba(139,92,246,.16);color:var(--primary2)}
+  .adm-panel{display:none}
+  .adm-panel.active{display:block;animation:fadein .3s ease}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.02em}
+  .field .hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.field-row{grid-template-columns:1fr}}
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border-radius:12px;margin-bottom:16px}
+  .switch{position:relative;width:42px;height:24px;border-radius:99px;background:var(--border);flex-shrink:0;transition:.2s;cursor:pointer}
+  .switch.on{background:var(--primary)}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:99px;background:#fff;transition:.2s}
+  .switch.on::after{transform:translateX(18px)}
+  .adm-card{padding:22px;border-radius:16px;margin-bottom:18px}
+  .adm-card h4{font-size:14px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .ord-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:12px;margin-bottom:8px;flex-wrap:wrap}
+  .ord-row .oi b{font-size:13px;display:block}
+  .ord-row .oi span{font-size:11px;color:var(--muted)}
+  .st-pill{font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;letter-spacing:.03em}
+  .st-wait{background:rgba(251,191,36,.15);color:var(--amber)}
+  .st-paid{background:rgba(52,211,153,.15);color:var(--success)}
+  .st-cancel{background:rgba(248,113,113,.15);color:var(--danger)}
+
+  /* ═══════════ PIX ═══════════ */
+  .pix-box{text-align:center}
+  .pix-qr{width:220px;height:220px;margin:18px auto;padding:12px;background:#fff;border-radius:16px;display:grid;place-items:center}
+  .pix-amount{font-size:30px;font-weight:900}
+  .pix-copy{display:flex;gap:8px;margin-top:16px;align-items:stretch}
+  .pix-copy input{flex:1}
+  .pix-steps{text-align:left;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+  .pix-steps li{font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -534,6 +573,11 @@
   </div>
 </div>
 
+<!-- ═══════════ ADMIN ═══════════ -->
+<div class="view" id="view-admin">
+  <div class="wrap" id="admWrap"></div>
+</div>
+
 </main>
 
 <!-- ═══════════ FOOTER ═══════════ -->
@@ -562,7 +606,7 @@
       </form>
     </div>
   </div>
-  <div class="copy">© 2026 SLASH CODES — Todos os direitos reservados.</div>
+  <div class="copy">© 2026 SLASH CODES — Todos os direitos reservados. · <a onclick="go('admin')" style="cursor:pointer;opacity:.55">Admin</a></div>
 </footer>
 
 <!-- ═══════════ CARRINHO ═══════════ -->
@@ -590,6 +634,11 @@
     <input placeholder="Buscar produtos, docs, blog…" id="searchInput" oninput="runSearch(this.value)">
     <div class="s-results" id="searchResults"><div class="s-empty">Digite para buscar… <span class="kbd">ESC</span> fecha</div></div>
   </div>
+</div>
+
+<!-- ═══════════ MODAL PIX ═══════════ -->
+<div class="modal" id="pixModal" onclick="if(event.target===this)closeAll()">
+  <div class="modal-box glass-strong pix-box" id="pixBox"></div>
 </div>
 
 <div id="toasts"></div>
@@ -670,6 +719,24 @@ let cart=JSON.parse(localStorage.getItem("sc-cart")||"[]");
 let currentView="home", activeCat="Todas", resCat="Todos";
 const fmt=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 
+/* ═══════════════════ CONFIG (ADMIN) ═══════════════════ */
+const CONFIG_DEFAULT={
+  storeName:"SLASH CODES", whatsapp:"",
+  pixKey:"", pixName:"SLASH CODES", pixCity:"SAO PAULO",
+  mpEnabled:false, mpBackendUrl:"/api/create-preference",
+  adminPass:""
+};
+function getConfig(){return {...CONFIG_DEFAULT,...JSON.parse(localStorage.getItem("sc-config")||"{}")}}
+function saveConfig(cfg){localStorage.setItem("sc-config",JSON.stringify(cfg))}
+let adminLogged=sessionStorage.getItem("sc-admin-session")==="1";
+function applyBranding(){document.title=getConfig().storeName+" — Produtos Digitais Premium"}
+
+/* ═══════════════════ PEDIDOS ═══════════════════ */
+function getOrders(){return JSON.parse(localStorage.getItem("sc-orders")||"[]")}
+function saveOrders(list){localStorage.setItem("sc-orders",JSON.stringify(list))}
+function addOrder(order){const list=getOrders();list.unshift(order);saveOrders(list);return order}
+function updateOrderStatus(id,status){const list=getOrders();const o=list.find(x=>x.id===id);if(o)o.status=status;saveOrders(list);return list}
+
 /* ═══════════════════ NAVEGAÇÃO ═══════════════════ */
 function buildNav(){
   const primaryLinks=NAV.filter(([id])=>NAV_PRIMARY.includes(id)).map(([id,l])=>`<a data-nav="${id}" onclick="go('${id}')">${l}</a>`).join("");
@@ -692,6 +759,7 @@ function go(view){
   document.getElementById("view-"+view).classList.add("active");
   document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("active",a.dataset.nav===view));
   location.hash=view; window.scrollTo({top:0}); closeMobile(); closeMore();
+  if(view==="admin")renderAdmin();
   requestAnimationFrame(observeReveals);
 }
 function toggleMobile(){document.getElementById("mnav").classList.toggle("open")}
@@ -783,27 +851,264 @@ function updateCart(){
   document.getElementById("accOrders").textContent=cart.length?1:0;
 }
 function openCart(){document.getElementById("cart").classList.add("open");document.getElementById("overlay").classList.add("show")}
+
+/* ═══════════════════ PIX (BR CODE) ═══════════════════ */
+function pixField(id,value){return id+String(value.length).padStart(2,"0")+value}
+function pixCrc16(payload){
+  let crc=0xFFFF;
+  for(let i=0;i<payload.length;i++){
+    crc^=payload.charCodeAt(i)<<8;
+    for(let j=0;j<8;j++){crc=(crc&0x8000)?((crc<<1)^0x1021):(crc<<1);crc&=0xFFFF}
+  }
+  return crc.toString(16).toUpperCase().padStart(4,"0");
+}
+function pixClean(s){return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function buildPixPayload({key,name,city,amount,txid}){
+  const merchantName=pixClean(name||"LOJA").toUpperCase().slice(0,25)||"LOJA";
+  const merchantCity=pixClean(city||"SAO PAULO").toUpperCase().slice(0,15)||"SAO PAULO";
+  const tx=(txid||"***").replace(/[^a-zA-Z0-9]/g,"").slice(0,25)||"***";
+  let p=pixField("00","01");
+  p+=pixField("26",pixField("00","br.gov.bcb.pix")+pixField("01",key));
+  p+=pixField("52","0000");
+  p+=pixField("53","986");
+  if(amount>0)p+=pixField("54",amount.toFixed(2));
+  p+=pixField("58","BR");
+  p+=pixField("59",merchantName);
+  p+=pixField("60",merchantCity);
+  p+=pixField("62",pixField("05",tx));
+  p+="6304";
+  return p+pixCrc16(p);
+}
+
+/* ═══════════════════ CHECKOUT ═══════════════════ */
 async function checkout(){
   if(!cart.length)return toast("Seu carrinho está vazio.","err");
-  const btn=document.querySelector('#cart .btn-primary');
-  const original=btn.textContent;
-  btn.disabled=true;btn.textContent="Gerando pagamento…";
-  try{
-    const res=await fetch("/api/create-preference",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({items:cart,origin:location.origin})
-    });
-    if(!res.ok)throw new Error("bad_response");
-    const data=await res.json();
-    if(!data.init_point)throw new Error("no_init_point");
-    window.location.href=data.init_point; // leva pro Checkout Pro do Mercado Pago
-  }catch(err){
-    console.error(err);
-    toast("Não consegui iniciar o pagamento. Confira se a function /api/create-preference está publicada (Vercel/Netlify) e se o MP_ACCESS_TOKEN está configurado.","err");
-    btn.disabled=false;btn.textContent=original;
+  const cfg=getConfig();
+  const items=cart.map(id=>PRODUCTS.find(p=>p.id===id));
+  const total=items.reduce((a,p)=>a+p.price,0);
+
+  if(cfg.mpEnabled&&cfg.mpBackendUrl){
+    const btn=document.querySelector('#cart .btn-primary');
+    const original=btn.textContent;
+    btn.disabled=true;btn.textContent="Gerando pagamento…";
+    try{
+      const res=await fetch(cfg.mpBackendUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:cart,origin:location.origin})});
+      if(!res.ok)throw new Error("bad_response");
+      const data=await res.json();
+      if(!data.init_point)throw new Error("no_init_point");
+      window.location.href=data.init_point;
+      return;
+    }catch(err){
+      console.error(err);
+      toast("Não consegui iniciar o pagamento pelo Mercado Pago. Gerando PIX como alternativa…","err");
+      btn.disabled=false;btn.textContent=original;
+    }
+  }
+
+  if(!cfg.pixKey){
+    toast("Loja sem chave PIX configurada ainda. Configure em Admin → Pagamentos.","err");
+    return;
+  }
+  const order={
+    id:"SC"+Date.now().toString(36).toUpperCase(),
+    items:items.map(p=>({id:p.id,name:p.name,price:p.price})),
+    total, status:"aguardando", createdAt:new Date().toISOString()
+  };
+  addOrder(order);
+  cart=[];saveCart();updateCart();renderAccount();
+  showPixModal(order,cfg);
+}
+
+function showPixModal(order,cfg){
+  const c=cfg||getConfig();
+  const payload=buildPixPayload({key:c.pixKey,name:c.pixName,city:c.pixCity,amount:order.total,txid:order.id});
+  document.getElementById("pixBox").innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:start;text-align:left">
+      <span class="badge badge-primary">Pedido ${order.id}</span><button class="icon-btn" onclick="closeAll()">✕</button>
+    </div>
+    <h2 style="margin-top:16px">Pague com PIX</h2>
+    <div class="pix-amount grad" style="margin-top:6px">${fmt(order.total)}</div>
+    <div class="pix-qr" id="pixQrHolder"></div>
+    <div class="pix-copy">
+      <input class="input" id="pixCopyInput" readonly value="${payload}" onclick="this.select()">
+      <button class="btn btn-primary btn-sm" onclick="copyPix()">Copiar</button>
+    </div>
+    <ul class="pix-steps muted">
+      <li>1. Abra o app do seu banco e escolha pagar com PIX (QR Code ou Copia e Cola).</li>
+      <li>2. Confira se o valor é <b>${fmt(order.total)}</b> e confirme.</li>
+      <li>3. Toque em "Já paguei" pra nos avisar e liberarmos seu pedido.</li>
+    </ul>
+    <button class="btn btn-primary glow" style="width:100%;margin-top:16px" onclick="confirmPix('${order.id}')">✅ Já paguei</button>`;
+  document.getElementById("pixModal").classList.add("show");
+  document.getElementById("overlay").classList.add("show");
+  const holder=document.getElementById("pixQrHolder");
+  if(window.QRCode){
+    new QRCode(holder,{text:payload,width:196,height:196,correctLevel:QRCode.CorrectLevel.M});
+  }else{
+    holder.innerHTML='<span class="muted" style="font-size:12px;padding:0 10px">QR indisponível sem internet — use o Copia e Cola acima</span>';
   }
 }
+function copyPix(){
+  const inp=document.getElementById("pixCopyInput");
+  inp.select();inp.setSelectionRange(0,99999);
+  const done=()=>toast("Código PIX copiado! 📋","ok");
+  if(navigator.clipboard)navigator.clipboard.writeText(inp.value).then(done).catch(()=>{document.execCommand("copy");done()});
+  else{document.execCommand("copy");done()}
+}
+function confirmPix(orderId){
+  saveOrders(updateOrderStatus(orderId,"aguardando_confirmacao"));
+  const cfg=getConfig();
+  const order=getOrders().find(o=>o.id===orderId);
+  if(cfg.whatsapp&&order){
+    const itemsTxt=order.items.map(i=>i.name).join(", ");
+    const msg=`Olá! Fiz o pagamento PIX do pedido ${order.id} (${fmt(order.total)}) — itens: ${itemsTxt}. Segue o comprovante:`;
+    const num=cfg.whatsapp.replace(/\D/g,"");
+    window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`,"_blank");
+  }else{
+    toast("Avisamos seu pagamento! Aguarde a confirmação manual do pedido.","ok");
+  }
+  renderAccount();closeAll();
+}
+
+/* ═══════════════════ MINHA CONTA ═══════════════════ */
+function renderAccount(){
+  const orders=getOrders();
+  const accOrdersEl=document.getElementById("accOrders");
+  if(accOrdersEl)accOrdersEl.textContent=orders.length;
+  const box=document.getElementById("accPurchases");
+  if(!box)return;
+  if(!orders.length){
+    box.innerHTML='Nenhuma compra ainda. <a class="grad" style="cursor:pointer;font-weight:700" onclick="go(\'loja\')">Explorar a loja →</a>';
+    return;
+  }
+  const stMap={aguardando:["Aguardando pagamento","st-wait"],aguardando_confirmacao:["Em análise","st-wait"],pago:["Entregue","st-paid"],cancelado:["Cancelado","st-cancel"]};
+  box.innerHTML=orders.map(o=>{
+    const[label,cls]=stMap[o.status]||stMap.aguardando;
+    return `<div class="ord-row glass" style="text-align:left"><div class="oi"><b>${o.id} · ${fmt(o.total)}</b><span>${o.items.map(i=>i.name).join(", ")}</span></div><span class="st-pill ${cls}">${label}</span></div>`;
+  }).join("");
+}
+
+/* ═══════════════════ ADMIN ═══════════════════ */
+let admTab="config";
+function renderAdmin(){
+  const cfg=getConfig();
+  const wrap=document.getElementById("admWrap");
+  if(!cfg.adminPass){renderAdminSetup(wrap);return}
+  if(!adminLogged){renderAdminLogin(wrap);return}
+  wrap.innerHTML=`
+    <div class="page-head" style="padding-top:40px"><h1>Painel Admin</h1><p>Configure pagamentos, contato e acompanhe pedidos.</p></div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="adminLogout()">Sair</button></div>
+    <div class="adm-tabs">
+      <button class="adm-tab ${admTab==='config'?'active':''}" onclick="setAdmTab('config')">⚙️ Configurações</button>
+      <button class="adm-tab ${admTab==='pedidos'?'active':''}" onclick="setAdmTab('pedidos')">🧾 Pedidos <span class="badge badge-line">${getOrders().length}</span></button>
+    </div>
+    <div class="adm-panel ${admTab==='config'?'active':''}" id="admPanelConfig"></div>
+    <div class="adm-panel ${admTab==='pedidos'?'active':''}" id="admPanelPedidos"></div>`;
+  if(admTab==="config")renderAdminConfig(cfg);else renderAdminOrders();
+}
+function setAdmTab(t){admTab=t;renderAdmin()}
+function renderAdminSetup(wrap){
+  wrap.innerHTML=`
+    <div class="adm-gate glass-strong">
+      <div class="ic">🔐</div>
+      <h2>Configurar acesso Admin</h2>
+      <p class="muted" style="margin-top:6px;font-size:13px">Crie uma senha pra proteger o painel administrativo (fica salva só neste navegador).</p>
+      <form style="margin-top:20px;display:flex;flex-direction:column;gap:10px" onsubmit="adminSetupSubmit(event)">
+        <input class="input" type="password" id="admNewPass" placeholder="Nova senha" required minlength="4">
+        <button class="btn btn-primary" type="submit" style="width:100%">Criar senha e entrar</button>
+      </form>
+    </div>`;
+}
+function adminSetupSubmit(e){
+  e.preventDefault();
+  const pass=document.getElementById("admNewPass").value;
+  const cfg=getConfig();cfg.adminPass=pass;saveConfig(cfg);
+  adminLogged=true;sessionStorage.setItem("sc-admin-session","1");
+  toast("Senha criada! Bem-vinda ao painel 👋","ok");renderAdmin();
+}
+function renderAdminLogin(wrap){
+  wrap.innerHTML=`
+    <div class="adm-gate glass-strong">
+      <div class="ic">🔒</div>
+      <h2>Área restrita</h2>
+      <p class="muted" style="margin-top:6px;font-size:13px">Digite a senha do painel administrativo.</p>
+      <form style="margin-top:20px;display:flex;flex-direction:column;gap:10px" onsubmit="adminLoginSubmit(event)">
+        <input class="input" type="password" id="admLoginPass" placeholder="Senha" required>
+        <button class="btn btn-primary" type="submit" style="width:100%">Entrar</button>
+      </form>
+    </div>`;
+}
+function adminLoginSubmit(e){
+  e.preventDefault();
+  const pass=document.getElementById("admLoginPass").value;
+  const cfg=getConfig();
+  if(pass===cfg.adminPass){adminLogged=true;sessionStorage.setItem("sc-admin-session","1");renderAdmin()}
+  else toast("Senha incorreta.","err");
+}
+function adminLogout(){adminLogged=false;sessionStorage.removeItem("sc-admin-session");go("home")}
+
+function renderAdminConfig(cfg){
+  document.getElementById("admPanelConfig").innerHTML=`
+    <div class="adm-card glass">
+      <h4>🏪 Loja</h4>
+      <div class="field"><label>Nome da loja</label><input class="input" id="cfgStoreName" value="${cfg.storeName}"></div>
+      <div class="field"><label>WhatsApp de suporte / confirmação de pagamento</label><input class="input" id="cfgWhatsapp" placeholder="Ex: 5531999999999" value="${cfg.whatsapp}">
+        <div class="hint">Número com DDI+DDD, só números. Usado pro botão "Já paguei" avisar você.</div></div>
+    </div>
+    <div class="adm-card glass">
+      <h4>💠 PIX</h4>
+      <div class="field"><label>Chave PIX</label><input class="input" id="cfgPixKey" placeholder="CPF, e-mail, telefone ou chave aleatória" value="${cfg.pixKey}"></div>
+      <div class="field-row">
+        <div class="field"><label>Nome do recebedor</label><input class="input" id="cfgPixName" maxlength="25" value="${cfg.pixName}"></div>
+        <div class="field"><label>Cidade</label><input class="input" id="cfgPixCity" maxlength="15" value="${cfg.pixCity}"></div>
+      </div>
+      <div class="hint">Gera automaticamente o QR Code e o código Copia e Cola com o valor de cada pedido — sem precisar de backend.</div>
+    </div>
+    <div class="adm-card glass">
+      <h4>💳 Mercado Pago (opcional, precisa de backend)</h4>
+      <div class="toggle-row glass"><span>Usar Checkout Pro do Mercado Pago no lugar do PIX</span>
+        <div class="switch ${cfg.mpEnabled?'on':''}" id="cfgMpSwitch" onclick="this.classList.toggle('on')"></div></div>
+      <div class="field"><label>URL da function de criação de preferência</label><input class="input" id="cfgMpUrl" value="${cfg.mpBackendUrl}"></div>
+      <div class="hint">Precisa de uma function backend (Vercel/Netlify) com o MP_ACCESS_TOKEN configurado. Sem isso, o site usa PIX automaticamente.</div>
+    </div>
+    <div class="adm-card glass">
+      <h4>🔑 Segurança</h4>
+      <div class="field"><label>Nova senha do admin (deixe em branco pra manter)</label><input class="input" type="password" id="cfgNewPass" placeholder="••••••"></div>
+    </div>
+    <button class="btn btn-primary glow" style="width:100%" onclick="saveAdminSettings()">Salvar configurações</button>`;
+}
+function saveAdminSettings(){
+  const cfg=getConfig();
+  cfg.storeName=document.getElementById("cfgStoreName").value.trim()||cfg.storeName;
+  cfg.whatsapp=document.getElementById("cfgWhatsapp").value.trim();
+  cfg.pixKey=document.getElementById("cfgPixKey").value.trim();
+  cfg.pixName=document.getElementById("cfgPixName").value.trim()||cfg.pixName;
+  cfg.pixCity=document.getElementById("cfgPixCity").value.trim()||cfg.pixCity;
+  cfg.mpEnabled=document.getElementById("cfgMpSwitch").classList.contains("on");
+  cfg.mpBackendUrl=document.getElementById("cfgMpUrl").value.trim();
+  const newPass=document.getElementById("cfgNewPass").value;
+  if(newPass)cfg.adminPass=newPass;
+  saveConfig(cfg);
+  applyBranding();
+  toast("Configurações salvas! 💾","ok");
+}
+function renderAdminOrders(){
+  const orders=getOrders();
+  const stMap={aguardando:["Aguardando pagamento","st-wait"],aguardando_confirmacao:["Em análise","st-wait"],pago:["Entregue","st-paid"],cancelado:["Cancelado","st-cancel"]};
+  document.getElementById("admPanelPedidos").innerHTML=orders.length?orders.map(o=>{
+    const[label,cls]=stMap[o.status]||stMap.aguardando;
+    return `<div class="ord-row glass">
+      <div class="oi"><b>${o.id} · ${fmt(o.total)}</b><span>${o.items.map(i=>i.name).join(", ")} · ${new Date(o.createdAt).toLocaleString("pt-BR")}</span></div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="st-pill ${cls}">${label}</span>
+        <button class="btn btn-ghost btn-sm" onclick="setOrderStatus('${o.id}','pago')">Marcar pago</button>
+        <button class="btn btn-ghost btn-sm" onclick="setOrderStatus('${o.id}','cancelado')">Cancelar</button>
+        <button class="icon-btn" onclick="deleteOrder('${o.id}')">🗑</button>
+      </div></div>`;
+  }).join(""):'<p class="muted">Nenhum pedido ainda.</p>';
+}
+function setOrderStatus(id,status){saveOrders(updateOrderStatus(id,status));renderAdminOrders();renderAccount();toast("Pedido atualizado.","ok")}
+function deleteOrder(id){saveOrders(getOrders().filter(o=>o.id!==id));renderAdminOrders();renderAccount()}
 
 /* ═══════════════════ SEÇÕES ═══════════════════ */
 function renderResources(){
@@ -908,6 +1213,7 @@ function closeAll(){
   document.getElementById("cart").classList.remove("open");
   document.getElementById("productModal").classList.remove("show");
   document.getElementById("search").classList.remove("show");
+  document.getElementById("pixModal").classList.remove("show");
   closeMobile();
 }
 
@@ -936,6 +1242,7 @@ function animateCount(el){
 /* ═══════════════════ ATALHOS ═══════════════════ */
 document.addEventListener("keydown",e=>{
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openSearch()}
+  if(e.ctrlKey&&e.altKey&&e.key.toLowerCase()==="a"){e.preventDefault();go("admin")}
   if(e.key==="Escape")closeAll();
 });
 window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(h&&document.getElementById("view-"+h))go(h)});
@@ -943,7 +1250,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(h&&d
 /* ═══════════════════ INIT ═══════════════════ */
 buildNav();renderHome();buildCats();renderShop();renderResources();renderPrograms();
 renderApps();renderPartners();renderProjects();renderDownloads();renderBlog();renderFaq();
-renderMarquee();updateCart();document.getElementById("docContent").innerHTML=DOCS.intro;
+renderMarquee();updateCart();renderAccount();applyBranding();document.getElementById("docContent").innerHTML=DOCS.intro;
 const startHash=location.hash.slice(1);if(startHash&&document.getElementById("view-"+startHash))go(startHash);
 observeReveals();
 </script>
