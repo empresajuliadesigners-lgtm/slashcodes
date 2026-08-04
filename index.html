@@ -337,7 +337,7 @@
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <a class="logo" href="#home" onclick="go('home')">
-        <span class="logo-mark">/</span> SLASH<span class="grad">CODES</span>
+        <span class="logo-mark">/</span> <span id="logoText">SLASH<span class="grad">CODES</span></span>
       </a>
       <nav class="main" id="mainNav"></nav>
     </div>
@@ -366,27 +366,22 @@
 <div class="view active" id="view-home">
   <div class="wrap">
     <div class="hero">
-      <span class="pill glass"><span class="dot"></span> Novos recursos gratuitos toda semana</span>
-      <h1>Código que vira <span class="grad">produto.</span><br>Produto que vira <span class="grad">resultado.</span></h1>
-      <p>Scripts, bots, sites, sistemas, APIs, templates e apps premium — com entrega automática, licenciamento integrado e suporte de verdade.</p>
+      <span class="pill glass"><span class="dot"></span> <span id="heroBadge"></span></span>
+      <h1 id="heroTitle"></h1>
+      <p id="heroDesc"></p>
       <div class="hero-cta">
-        <button class="btn btn-primary glow" onclick="go('loja')">Explorar a loja →</button>
-        <button class="btn btn-ghost" onclick="go('recursos')">Recursos gratuitos</button>
+        <button class="btn btn-primary glow" onclick="go('loja')" id="heroCtaPrimary"></button>
+        <button class="btn btn-ghost" onclick="go('recursos')" id="heroCtaSecondary"></button>
       </div>
       <a class="banner glass glow" onclick="go('loja')">
         <span class="orb" style="background:rgba(139,92,246,.3);left:-60px;top:-60px"></span>
         <span class="orb" style="background:rgba(34,211,238,.25);right:-40px;bottom:-80px"></span>
-        <h3>BLACK SLASH — até 40% OFF</h3>
-        <span>Em toda a loja por tempo limitado · Clique para aproveitar</span>
+        <h3 id="bannerTitle"></h3>
+        <span id="bannerDesc"></span>
       </a>
     </div>
 
-    <div class="stats">
-      <div class="stat glass reveal"><b class="grad" data-count="12400">0</b><span>Produtos entregues</span></div>
-      <div class="stat glass reveal"><b class="grad" data-count="3800">0</b><span>Clientes ativos</span></div>
-      <div class="stat glass reveal"><b class="grad" data-count="48000">0</b><span>Downloads</span></div>
-      <div class="stat glass reveal"><b class="grad">4.9★</b><span>Avaliação média</span></div>
-    </div>
+    <div class="stats" id="statsGrid"></div>
 
     <section class="block">
       <div class="sec-head reveal"><div><div class="eyebrow">Destaques</div><h2>Produtos em destaque</h2></div><a class="link" onclick="go('loja')">Ver tudo →</a></div>
@@ -414,11 +409,7 @@
 
     <section class="block">
       <div class="sec-head reveal"><div><div class="eyebrow">Confiança</div><h2>O que dizem nossos clientes</h2></div></div>
-      <div class="grid g3">
-        <div class="testi glass reveal"><p>“O melhor investimento que fiz. Entrega instantânea e o suporte responde em minutos.”</p><div class="who"><div><b>Lucas M.</b><span>Dono de servidor FiveM</span></div><span class="stars">★★★★★</span></div></div>
-        <div class="testi glass reveal"><p>“Templates impecáveis, código limpo e documentação completa. Virou minha base de trabalho.”</p><div class="who"><div><b>Ana P.</b><span>Designer</span></div><span class="stars">★★★★★</span></div></div>
-        <div class="testi glass reveal"><p>“As APIs da SLASH economizaram semanas do meu projeto. Qualidade de outro nível.”</p><div class="who"><div><b>Rafael T.</b><span>Dev Full Stack</span></div><span class="stars">★★★★★</span></div></div>
-      </div>
+      <div class="grid g3" id="testiGrid"></div>
     </section>
   </div>
 
@@ -584,12 +575,12 @@
 <footer>
   <div class="wrap foot-grid">
     <div>
-      <a class="logo"><span class="logo-mark">/</span> SLASH<span class="grad">CODES</span></a>
-      <p class="muted" style="font-size:13px;margin-top:14px;max-width:280px;line-height:1.6">Scripts, bots, sistemas e produtos digitais premium com entrega automática e suporte dedicado.</p>
+      <a class="logo"><span class="logo-mark">/</span> <span id="footLogoText">SLASH<span class="grad">CODES</span></span></a>
+      <p class="muted" style="font-size:13px;margin-top:14px;max-width:280px;line-height:1.6" id="footDesc"></p>
       <div class="socials">
-        <a href="#" aria-label="GitHub"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.6 18.4.5 12 .5z"/></svg></a>
-        <a href="#" aria-label="Discord"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.9 3l-.2.4c1.6.4 3 1.1 4.3 2a16 16 0 0 0-14 0c1.3-.9 2.7-1.6 4.3-2L10.1 3a19.8 19.8 0 0 0-4.4 1.4C3 8.6 2.4 12.7 2.7 16.7c1.9 1.4 3.7 2.2 5.5 2.8l.9-1.4c-.9-.3-1.7-.8-2.4-1.3l.5-.4a14 14 0 0 0 9.6 0l.5.4c-.7.5-1.5 1-2.4 1.3l.9 1.4c1.8-.6 3.6-1.4 5.5-2.8.4-4.6-.7-8.6-2.9-12.3zM9.7 14.6c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg></a>
-        <a href="#" aria-label="YouTube"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg></a>
+        <a href="#" id="socialGithub" aria-label="GitHub"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.6 18.4.5 12 .5z"/></svg></a>
+        <a href="#" id="socialDiscord" aria-label="Discord"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.9 3l-.2.4c1.6.4 3 1.1 4.3 2a16 16 0 0 0-14 0c1.3-.9 2.7-1.6 4.3-2L10.1 3a19.8 19.8 0 0 0-4.4 1.4C3 8.6 2.4 12.7 2.7 16.7c1.9 1.4 3.7 2.2 5.5 2.8l.9-1.4c-.9-.3-1.7-.8-2.4-1.3l.5-.4a14 14 0 0 0 9.6 0l.5.4c-.7.5-1.5 1-2.4 1.3l.9 1.4c1.8-.6 3.6-1.4 5.5-2.8.4-4.6-.7-8.6-2.9-12.3zM9.7 14.6c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg></a>
+        <a href="#" id="socialYoutube" aria-label="YouTube"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg></a>
       </div>
     </div>
     <div><h5>Navegação</h5><ul id="footNav"></ul></div>
@@ -606,7 +597,7 @@
       </form>
     </div>
   </div>
-  <div class="copy">© 2026 SLASH CODES — Todos os direitos reservados. · <a onclick="go('admin')" style="cursor:pointer;opacity:.55">Admin</a></div>
+  <div class="copy">© 2026 <span id="footCopyName">SLASH CODES</span> — Todos os direitos reservados. · <a onclick="go('admin')" style="cursor:pointer;opacity:.55">Admin</a></div>
 </footer>
 
 <!-- ═══════════ CARRINHO ═══════════ -->
@@ -644,71 +635,101 @@
 <div id="toasts"></div>
 
 <script>
-/* ═══════════════════ DADOS ═══════════════════ */
-const CATS=["Scripts","Bots","Sites","Design","Templates","Pacotes","Cursos","Programas","Assinaturas","Licenças","Outros"];
-const PRODUCTS=[
- {id:1,name:"SC Auth Script",cat:"Scripts",desc:"Autenticação completa com 2FA, sessões e dashboard para FiveM/MTA.",price:29.9,old:39.9,rating:4.9,dl:2100,ic:"🔐",tag:["featured","bestseller"],del:"BOTH"},
- {id:2,name:"Slasher Bot",cat:"Bots",desc:"Bot de Discord premium: moderação, tickets, economia e música.",price:49.9,old:69.9,rating:5,dl:3400,ic:"🤖",tag:["featured","bestseller"],del:"LICENSE"},
- {id:3,name:"Landing Forge",cat:"Templates",desc:"Template de landing page Next.js + Tailwind com 12 seções premium.",price:79,old:null,rating:4.8,dl:890,ic:"🧩",tag:["featured","new"],del:"DOWNLOAD"},
- {id:4,name:"Store API Pro",cat:"Sites",desc:"API completa de loja digital: produtos, pagamentos e licenças.",price:149,old:199,rating:4.9,dl:560,ic:"🛒",tag:["featured"],del:"LICENSE"},
- {id:5,name:"UI Kit Neon",cat:"Design",desc:"Kit com 240 componentes Figma dark/glassmorphism prontos.",price:39.9,old:null,rating:4.7,dl:1200,ic:"🎨",tag:["new"],del:"DOWNLOAD"},
- {id:6,name:"Assinatura SLASH+",cat:"Assinaturas",desc:"Acesso a todos os templates e suporte prioritário.",price:19.9,old:null,rating:5,dl:0,ic:"🔁",tag:[],del:"SUBSCRIPTION"},
- {id:7,name:"Licença SC Panel",cat:"Licenças",desc:"Licença vitalícia do painel administrativo SC Panel.",price:99,old:129,rating:4.8,dl:0,ic:"🔑",tag:[],del:"LICENSE"},
- {id:8,name:"Pack Dev Starter",cat:"Pacotes",desc:"Boilerplate Next.js + API base + scripts de deploy.",price:59.9,old:79.9,rating:4.9,dl:1800,ic:"📦",tag:["bestseller"],del:"DOWNLOAD"},
- {id:9,name:"Curso FiveM Pro",cat:"Cursos",desc:"Do zero ao servidor profissional de FiveM.",price:89,old:null,rating:4.6,dl:0,ic:"🎓",tag:["new"],del:"DOWNLOAD"},
- {id:10,name:"HUD Minimal MTA",cat:"Scripts",desc:"Interface clean e otimizada para servidores MTA.",price:24.9,old:34.9,rating:4.5,dl:760,ic:"🖥️",tag:[],del:"DOWNLOAD"}
-];
-const RESOURCES=[
- {n:"Guia de Webhooks PIX",c:"APIs",d:"Confirmação assíncrona de pagamentos.",ic:"💳"},
- {n:"Snippets TypeScript",c:"Programação",d:"50 utilitários tipados prontos.",ic:"🧬"},
- {n:"Pack de Ícones Glass",c:"Design",d:"320 ícones SVG glassmorphism.",ic:"✨"},
- {n:"Bot Base Discord.js v14",c:"Discord",d:"Estrutura modular com slash.",ic:"🤖"},
- {n:"Inventory FiveM",c:"FiveM",d:"Inventário otimizado.",ic:"🎒"},
- {n:"HUD Minimalista MTA",c:"MTA",d:"Interface clean para MTA.",ic:"🖥️"},
- {n:"Plugin Economias Minecraft",c:"Minecraft",d:"Sistema de economia com API.",ic:"⛏️"},
- {n:"Cheatsheet PostgreSQL",c:"Banco de Dados",d:"Consultas e índices explicados.",ic:"🐘"},
- {n:"Prompts de IA para Devs",c:"IA",d:"Biblioteca de prompts de código.",ic:"🧠"}
-];
-const RES_CATS=["Todos","Programação","Design","APIs","Discord","FiveM","MTA","Minecraft","Banco de Dados","IA"];
-const PROGRAMS=[
- {n:"SC Launcher",v:"2.4.0",d:"Gerenciador de licenças e atualizações SLASH.",ic:"🚀",dl:5200,req:"Windows 10+ · 4GB RAM"}
-];
-const APPS=[
- {n:"JUJU CLIPS",d:"Criação de clips curtos com IA: cortes automáticos, legendas e exportação para TikTok, Reels e Shorts.",ic:"🎬",st:"Disponível"},
- {n:"SLASH Mobile",d:"Em breve: sua loja SLASH no bolso.",ic:"📱",st:"Em breve"}
-];
-const PARTNERS=[
- {n:"JUJU CLIPS",d:"Plataforma oficial do app JUJU CLIPS.",st:"No ar",ic:"🎬"},
- {n:"NEON HOST",d:"Hospedagem otimizada para servidores gamer.",st:"No ar",ic:"🖧"},
- {n:"PIXFLOW",d:"Gateway interno de pagamentos instantâneos.",st:"Em breve",ic:"⚡"}
-];
-const PROJECTS=[
- {n:"NeonStore",c:"site",d:"E-commerce completo para marca de periféricos.",y:2025,ic:"🛍️"},
- {n:"GuildHub",c:"sistema",d:"Gestão de comunidades gamer com Discord.",y:2025,ic:"🏰"},
- {n:"PixFlow",c:"api",d:"Gateway interno de pagamentos instantâneos.",y:2026,ic:"⚡"}
-];
-const POSTS=[
- {t:"Bem-vindo à SLASH CODES",c:"Novidades",d:"2026-08-01",e:"Conheça nossa nova plataforma de produtos digitais.",ic:"🎉"},
- {t:"Como validar licenças via API",c:"Tutoriais",d:"2026-07-28",e:"Guia completo de integração do endpoint de licenças.",ic:"🔑"},
- {t:"Novidades do SC Launcher 2.4",c:"Atualizações",d:"2026-07-20",e:"Suporte a proxy e correções de login.",ic:"🚀"}
-];
-const FAQ=[
- {q:"Como recebo meu produto após a compra?",a:"A entrega é automática. Assim que o pagamento é confirmado, licenças e downloads ficam disponíveis na sua conta em segundos."},
- {q:"Posso pedir reembolso?",a:"Sim. Você tem até 7 dias após a compra para solicitar reembolso, desde que o produto não tenha sido baixado/ativado."},
- {q:"As licenças funcionam offline?",a:"Sim. Nossas licenças usam assinatura Ed25519, permitindo validação offline pelo seu script ou bot."},
- {q:"Como funciona o suporte?",a:"Abrindo um ticket na aba Suporte. Nossa equipe (os próprios desenvolvedores) responde normalmente em poucas horas."}
-];
-const DOCS={
- intro:`<h2>Introdução</h2><p>Bem-vindo à documentação da <b>SLASH CODES</b>. Aqui você encontra guias de instalação, referência de APIs e tutoriais.</p><pre>npm install @slashcodes/sdk</pre><p>Use sua chave de licença para ativar qualquer produto.</p>`,
- lic:`<h2>Validação de Licenças</h2><p>Toda licença SLASH pode ser validada via API.</p><pre>curl -X POST https://slashcodes.dev/api/v1/licenses/validate \\
+/* ═══════════════════ CONTEÚDO DO SITE (100% editável no Admin) ═══════════════════ */
+const CONTENT_DEFAULT={
+  storeName:"SLASH CODES",
+  hero:{
+    badge:"Novos recursos gratuitos toda semana",
+    title1:"Código que vira ", highlight1:"produto.",
+    title2:"Produto que vira ", highlight2:"resultado.",
+    desc:"Scripts, bots, sites, sistemas, APIs, templates e apps premium — com entrega automática, licenciamento integrado e suporte de verdade.",
+    ctaPrimary:"Explorar a loja →", ctaSecondary:"Recursos gratuitos",
+    bannerTitle:"BLACK SLASH — até 40% OFF", bannerDesc:"Em toda a loja por tempo limitado · Clique para aproveitar"
+  },
+  stats:[
+    {value:"12400",label:"Produtos entregues"},
+    {value:"3800",label:"Clientes ativos"},
+    {value:"48000",label:"Downloads"},
+    {value:"4.9★",label:"Avaliação média"}
+  ],
+  testimonials:[
+    {text:"O melhor investimento que fiz. Entrega instantânea e o suporte responde em minutos.",name:"Lucas M.",role:"Dono de servidor FiveM"},
+    {text:"Templates impecáveis, código limpo e documentação completa. Virou minha base de trabalho.",name:"Ana P.",role:"Designer"},
+    {text:"As APIs da SLASH economizaram semanas do meu projeto. Qualidade de outro nível.",name:"Rafael T.",role:"Dev Full Stack"}
+  ],
+  footer:{desc:"Scripts, bots, sistemas e produtos digitais premium com entrega automática e suporte dedicado.",github:"#",discord:"#",youtube:"#"},
+  products:[
+    {id:1,name:"SC Auth Script",cat:"Scripts",desc:"Autenticação completa com 2FA, sessões e dashboard para FiveM/MTA.",price:29.9,old:39.9,rating:4.9,dl:2100,ic:"🔐",tag:["featured","bestseller"],del:"BOTH"},
+    {id:2,name:"Slasher Bot",cat:"Bots",desc:"Bot de Discord premium: moderação, tickets, economia e música.",price:49.9,old:69.9,rating:5,dl:3400,ic:"🤖",tag:["featured","bestseller"],del:"LICENSE"},
+    {id:3,name:"Landing Forge",cat:"Templates",desc:"Template de landing page Next.js + Tailwind com 12 seções premium.",price:79,old:null,rating:4.8,dl:890,ic:"🧩",tag:["featured","new"],del:"DOWNLOAD"},
+    {id:4,name:"Store API Pro",cat:"Sites",desc:"API completa de loja digital: produtos, pagamentos e licenças.",price:149,old:199,rating:4.9,dl:560,ic:"🛒",tag:["featured"],del:"LICENSE"},
+    {id:5,name:"UI Kit Neon",cat:"Design",desc:"Kit com 240 componentes Figma dark/glassmorphism prontos.",price:39.9,old:null,rating:4.7,dl:1200,ic:"🎨",tag:["new"],del:"DOWNLOAD"},
+    {id:6,name:"Assinatura SLASH+",cat:"Assinaturas",desc:"Acesso a todos os templates e suporte prioritário.",price:19.9,old:null,rating:5,dl:0,ic:"🔁",tag:[],del:"SUBSCRIPTION"},
+    {id:7,name:"Licença SC Panel",cat:"Licenças",desc:"Licença vitalícia do painel administrativo SC Panel.",price:99,old:129,rating:4.8,dl:0,ic:"🔑",tag:[],del:"LICENSE"},
+    {id:8,name:"Pack Dev Starter",cat:"Pacotes",desc:"Boilerplate Next.js + API base + scripts de deploy.",price:59.9,old:79.9,rating:4.9,dl:1800,ic:"📦",tag:["bestseller"],del:"DOWNLOAD"},
+    {id:9,name:"Curso FiveM Pro",cat:"Cursos",desc:"Do zero ao servidor profissional de FiveM.",price:89,old:null,rating:4.6,dl:0,ic:"🎓",tag:["new"],del:"DOWNLOAD"},
+    {id:10,name:"HUD Minimal MTA",cat:"Scripts",desc:"Interface clean e otimizada para servidores MTA.",price:24.9,old:34.9,rating:4.5,dl:760,ic:"🖥️",tag:[],del:"DOWNLOAD"}
+  ],
+  resources:[
+    {_id:"r1",n:"Guia de Webhooks PIX",c:"APIs",d:"Confirmação assíncrona de pagamentos.",ic:"💳"},
+    {_id:"r2",n:"Snippets TypeScript",c:"Programação",d:"50 utilitários tipados prontos.",ic:"🧬"},
+    {_id:"r3",n:"Pack de Ícones Glass",c:"Design",d:"320 ícones SVG glassmorphism.",ic:"✨"},
+    {_id:"r4",n:"Bot Base Discord.js v14",c:"Discord",d:"Estrutura modular com slash.",ic:"🤖"},
+    {_id:"r5",n:"Inventory FiveM",c:"FiveM",d:"Inventário otimizado.",ic:"🎒"},
+    {_id:"r6",n:"HUD Minimalista MTA",c:"MTA",d:"Interface clean para MTA.",ic:"🖥️"},
+    {_id:"r7",n:"Plugin Economias Minecraft",c:"Minecraft",d:"Sistema de economia com API.",ic:"⛏️"},
+    {_id:"r8",n:"Cheatsheet PostgreSQL",c:"Banco de Dados",d:"Consultas e índices explicados.",ic:"🐘"},
+    {_id:"r9",n:"Prompts de IA para Devs",c:"IA",d:"Biblioteca de prompts de código.",ic:"🧠"}
+  ],
+  programs:[
+    {_id:"pg1",n:"SC Launcher",v:"2.4.0",d:"Gerenciador de licenças e atualizações SLASH.",ic:"🚀",dl:5200,req:"Windows 10+ · 4GB RAM"}
+  ],
+  apps:[
+    {_id:"a1",n:"JUJU CLIPS",d:"Criação de clips curtos com IA: cortes automáticos, legendas e exportação para TikTok, Reels e Shorts.",ic:"🎬",st:"Disponível"},
+    {_id:"a2",n:"SLASH Mobile",d:"Em breve: sua loja SLASH no bolso.",ic:"📱",st:"Em breve"}
+  ],
+  partners:[
+    {_id:"p1",n:"JUJU CLIPS",d:"Plataforma oficial do app JUJU CLIPS.",st:"No ar",ic:"🎬"},
+    {_id:"p2",n:"NEON HOST",d:"Hospedagem otimizada para servidores gamer.",st:"No ar",ic:"🖧"},
+    {_id:"p3",n:"PIXFLOW",d:"Gateway interno de pagamentos instantâneos.",st:"Em breve",ic:"⚡"}
+  ],
+  projects:[
+    {_id:"pj1",n:"NeonStore",c:"site",d:"E-commerce completo para marca de periféricos.",y:2025,ic:"🛍️"},
+    {_id:"pj2",n:"GuildHub",c:"sistema",d:"Gestão de comunidades gamer com Discord.",y:2025,ic:"🏰"},
+    {_id:"pj3",n:"PixFlow",c:"api",d:"Gateway interno de pagamentos instantâneos.",y:2026,ic:"⚡"}
+  ],
+  posts:[
+    {_id:"po1",t:"Bem-vindo à SLASH CODES",c:"Novidades",d:"2026-08-01",e:"Conheça nossa nova plataforma de produtos digitais.",ic:"🎉"},
+    {_id:"po2",t:"Como validar licenças via API",c:"Tutoriais",d:"2026-07-28",e:"Guia completo de integração do endpoint de licenças.",ic:"🔑"},
+    {_id:"po3",t:"Novidades do SC Launcher 2.4",c:"Atualizações",d:"2026-07-20",e:"Suporte a proxy e correções de login.",ic:"🚀"}
+  ],
+  faq:[
+    {_id:"f1",q:"Como recebo meu produto após a compra?",a:"A entrega é automática. Assim que o pagamento é confirmado, licenças e downloads ficam disponíveis na sua conta em segundos."},
+    {_id:"f2",q:"Posso pedir reembolso?",a:"Sim. Você tem até 7 dias após a compra para solicitar reembolso, desde que o produto não tenha sido baixado/ativado."},
+    {_id:"f3",q:"As licenças funcionam offline?",a:"Sim. Nossas licenças usam assinatura Ed25519, permitindo validação offline pelo seu script ou bot."},
+    {_id:"f4",q:"Como funciona o suporte?",a:"Abrindo um ticket na aba Suporte. Nossa equipe (os próprios desenvolvedores) responde normalmente em poucas horas."}
+  ],
+  docs:{
+    intro:`<h2>Introdução</h2><p>Bem-vindo à documentação. Aqui você encontra guias de instalação, referência de APIs e tutoriais.</p><pre>npm install @slashcodes/sdk</pre><p>Use sua chave de licença para ativar qualquer produto.</p>`,
+    lic:`<h2>Validação de Licenças</h2><p>Toda licença pode ser validada via API.</p><pre>curl -X POST https://slashcodes.dev/api/v1/licenses/validate \\
   -H "Content-Type: application/json" \\
   -d '{"key":"SC-XXXX-XXXX","hwid":"opcional"}'</pre><p>Resposta:</p><pre>{ "valid": true, "product": "slasher-bot", "expiresAt": null }</pre>`,
- inst:`<h2>Instalação</h2><p>Baixe o produto na sua conta, extraia o arquivo e siga o README incluso.</p><pre>unzip produto.zip
+    inst:`<h2>Instalação</h2><p>Baixe o produto na sua conta, extraia o arquivo e siga o README incluso.</p><pre>unzip produto.zip
 cd produto
 npm install
 npm start</pre>`
+  }
 };
-const PART=["JUJU CLIPS","NEON HOST","PIXFLOW","GUILD HUB","ASTRO PANEL","DEVFORGE"];
+function getContent(){
+  const saved=JSON.parse(localStorage.getItem("sc-content")||"null");
+  return saved?{...CONTENT_DEFAULT,...saved}:JSON.parse(JSON.stringify(CONTENT_DEFAULT));
+}
+function saveContent(){localStorage.setItem("sc-content",JSON.stringify(CONTENT))}
+let CONTENT=getContent();
+let PRODUCTS=CONTENT.products, RESOURCES=CONTENT.resources, PROGRAMS=CONTENT.programs,
+    APPS=CONTENT.apps, PARTNERS=CONTENT.partners, PROJECTS=CONTENT.projects,
+    POSTS=CONTENT.posts, FAQ=CONTENT.faq, DOCS=CONTENT.docs;
+
 const NAV=[["home","Home"],["loja","Loja"],["recursos","Recursos"],["programas","Programas"],["aplicativos","Aplicativos"],["parceiros","Sites Parceiros"],["projetos","Projetos"],["docs","Documentação"],["downloads","Downloads"],["blog","Blog"],["suporte","Suporte"]];
 /* itens principais visíveis na barra + resto no menu "Mais", pra não estourar a largura do header */
 const NAV_PRIMARY=["loja","recursos","programas","docs","suporte"];
@@ -719,9 +740,9 @@ let cart=JSON.parse(localStorage.getItem("sc-cart")||"[]");
 let currentView="home", activeCat="Todas", resCat="Todos";
 const fmt=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 
-/* ═══════════════════ CONFIG (ADMIN) ═══════════════════ */
+/* ═══════════════════ CONFIG (ADMIN — PAGAMENTOS) ═══════════════════ */
 const CONFIG_DEFAULT={
-  storeName:"SLASH CODES", whatsapp:"",
+  whatsapp:"",
   pixKey:"", pixName:"SLASH CODES", pixCity:"SAO PAULO",
   mpEnabled:false, mpBackendUrl:"/api/create-preference",
   adminPass:""
@@ -729,7 +750,44 @@ const CONFIG_DEFAULT={
 function getConfig(){return {...CONFIG_DEFAULT,...JSON.parse(localStorage.getItem("sc-config")||"{}")}}
 function saveConfig(cfg){localStorage.setItem("sc-config",JSON.stringify(cfg))}
 let adminLogged=sessionStorage.getItem("sc-admin-session")==="1";
-function applyBranding(){document.title=getConfig().storeName+" — Produtos Digitais Premium"}
+function applyBranding(){
+  document.title=CONTENT.storeName+" — Produtos Digitais Premium";
+  document.querySelectorAll("#logoText,#footLogoText").forEach(el=>el.textContent=CONTENT.storeName);
+  document.getElementById("footCopyName").textContent=CONTENT.storeName;
+}
+function renderBrandContent(){
+  const h=CONTENT.hero;
+  document.getElementById("heroBadge").textContent=h.badge;
+  document.getElementById("heroTitle").innerHTML=`${h.title1}<span class="grad">${h.highlight1}</span><br>${h.title2}<span class="grad">${h.highlight2}</span>`;
+  document.getElementById("heroDesc").textContent=h.desc;
+  document.getElementById("heroCtaPrimary").textContent=h.ctaPrimary;
+  document.getElementById("heroCtaSecondary").textContent=h.ctaSecondary;
+  document.getElementById("bannerTitle").textContent=h.bannerTitle;
+  document.getElementById("bannerDesc").textContent=h.bannerDesc;
+  document.getElementById("statsGrid").innerHTML=CONTENT.stats.map(s=>{
+    const isNum=/^\d+$/.test(String(s.value).trim());
+    return `<div class="stat glass reveal">${isNum?`<b class="grad" data-count="${s.value}">0</b>`:`<b class="grad">${s.value}</b>`}<span>${s.label}</span></div>`;
+  }).join("");
+  document.getElementById("testiGrid").innerHTML=CONTENT.testimonials.map(t=>`
+    <div class="testi glass reveal"><p>"${t.text}"</p><div class="who"><div><b>${t.name}</b><span>${t.role}</span></div><span class="stars">★★★★★</span></div></div>`).join("");
+  document.getElementById("footDesc").textContent=CONTENT.footer.desc;
+  document.getElementById("socialGithub").href=CONTENT.footer.github||"#";
+  document.getElementById("socialDiscord").href=CONTENT.footer.discord||"#";
+  document.getElementById("socialYoutube").href=CONTENT.footer.youtube||"#";
+  applyBranding();
+}
+/* reconecta as variáveis "legado" ao CONTENT e re-renderiza tudo — chamado após qualquer alteração no Admin */
+function refreshPublicContent(){
+  PRODUCTS=CONTENT.products;RESOURCES=CONTENT.resources;PROGRAMS=CONTENT.programs;
+  APPS=CONTENT.apps;PARTNERS=CONTENT.partners;PROJECTS=CONTENT.projects;
+  POSTS=CONTENT.posts;FAQ=CONTENT.faq;DOCS=CONTENT.docs;
+  cart=cart.filter(id=>PRODUCTS.some(p=>p.id===id));saveCart();
+  renderBrandContent();buildCats();renderHome();renderShop();renderResources();renderPrograms();
+  renderApps();renderPartners();renderProjects();renderDownloads();renderBlog();renderFaq();renderMarquee();
+  updateCart();renderAccount();
+  const activeDoc=document.querySelector(".docs-nav a.active");
+  document.getElementById("docContent").innerHTML=DOCS.intro;
+}
 
 /* ═══════════════════ PEDIDOS ═══════════════════ */
 function getOrders(){return JSON.parse(localStorage.getItem("sc-orders")||"[]")}
@@ -805,8 +863,12 @@ function renderShop(){
   observeReveals();
 }
 function buildCats(){
-  document.getElementById("catList").innerHTML=['<button class="chip active" onclick="setCat(this,\'Todas\')">Todas</button>',
-    ...CATS.map(c=>`<button class="chip" onclick="setCat(this,'${c}')">${c}</button>`)].join("");
+  const cats=[...new Set(PRODUCTS.map(p=>p.cat))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+  if(activeCat!=="Todas"&&!cats.includes(activeCat))activeCat="Todas";
+  document.getElementById("catList").innerHTML=[
+    `<button class="chip${activeCat==="Todas"?" active":""}" onclick="setCat(this,'Todas')">Todas</button>`,
+    ...cats.map(c=>`<button class="chip${activeCat===c?" active":""}" onclick="setCat(this,'${c}')">${c}</button>`)
+  ].join("");
 }
 function setCat(el,c){activeCat=c;document.querySelectorAll("#catList .chip").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderShop()}
 function filterShop(tag){go("loja")}
@@ -990,21 +1052,104 @@ function renderAccount(){
 
 /* ═══════════════════ ADMIN ═══════════════════ */
 let admTab="config";
+const COLLECTIONS={
+  products:{label:"Produtos",icon:"🛒",idField:"id",
+    title:it=>`${it.name} · ${fmt(+it.price||0)}`,
+    fields:[
+      {k:"name",label:"Nome",type:"text",req:true},
+      {k:"cat",label:"Categoria",type:"text",req:true,hint:"Categorias da loja são geradas a partir disso."},
+      {k:"ic",label:"Ícone (emoji)",type:"text"},
+      {k:"desc",label:"Descrição",type:"textarea",req:true},
+      {k:"price",label:"Preço (R$)",type:"number",step:"0.01",req:true},
+      {k:"old",label:"Preço antigo (opcional — mostra desconto)",type:"number",step:"0.01"},
+      {k:"rating",label:"Avaliação (0 a 5)",type:"number",step:"0.1"},
+      {k:"dl",label:"Contador de downloads",type:"number"},
+      {k:"tag",label:"Tags (separe por vírgula: featured, new, bestseller)",type:"tags"},
+      {k:"del",label:"Tipo de entrega",type:"select",options:["DOWNLOAD","LICENSE","BOTH","SUBSCRIPTION"]}
+    ], newItem:()=>({id:Math.max(0,...CONTENT.products.map(p=>p.id))+1,name:"",cat:"",ic:"✨",desc:"",price:0,old:null,rating:5,dl:0,tag:[],del:"DOWNLOAD"})},
+  resources:{label:"Recursos",icon:"🎁",idField:"_id",
+    title:it=>it.n,
+    fields:[
+      {k:"n",label:"Nome",type:"text",req:true},
+      {k:"c",label:"Categoria",type:"text",req:true},
+      {k:"ic",label:"Ícone (emoji)",type:"text"},
+      {k:"d",label:"Descrição",type:"textarea",req:true}
+    ], newItem:()=>({_id:newId(),n:"",c:"",ic:"✨",d:""})},
+  programs:{label:"Programas",icon:"🚀",idField:"_id",
+    title:it=>`${it.n} v${it.v}`,
+    fields:[
+      {k:"n",label:"Nome",type:"text",req:true},
+      {k:"v",label:"Versão",type:"text"},
+      {k:"ic",label:"Ícone (emoji)",type:"text"},
+      {k:"d",label:"Descrição",type:"textarea",req:true},
+      {k:"dl",label:"Contador de downloads",type:"number"},
+      {k:"req",label:"Requisitos",type:"text"}
+    ], newItem:()=>({_id:newId(),n:"",v:"1.0",ic:"🚀",d:"",dl:0,req:""})},
+  apps:{label:"Aplicativos",icon:"📱",idField:"_id",
+    title:it=>it.n,
+    fields:[
+      {k:"n",label:"Nome",type:"text",req:true},
+      {k:"ic",label:"Ícone (emoji)",type:"text"},
+      {k:"d",label:"Descrição",type:"textarea",req:true},
+      {k:"st",label:"Status",type:"select",options:["Disponível","Em breve"]}
+    ], newItem:()=>({_id:newId(),n:"",ic:"📱",d:"",st:"Em breve"})},
+  partners:{label:"Sites Parceiros",icon:"🤝",idField:"_id",
+    title:it=>it.n,
+    fields:[
+      {k:"n",label:"Nome",type:"text",req:true},
+      {k:"ic",label:"Ícone (emoji)",type:"text"},
+      {k:"d",label:"Descrição",type:"textarea",req:true},
+      {k:"st",label:"Status",type:"select",options:["No ar","Em breve"]}
+    ], newItem:()=>({_id:newId(),n:"",ic:"🤝",d:"",st:"No ar"})},
+  projects:{label:"Projetos",icon:"🏆",idField:"_id",
+    title:it=>`${it.n} (${it.y})`,
+    fields:[
+      {k:"n",label:"Nome",type:"text",req:true},
+      {k:"c",label:"Categoria (site, sistema, api…)",type:"text"},
+      {k:"ic",label:"Ícone (emoji)",type:"text"},
+      {k:"d",label:"Descrição",type:"textarea",req:true},
+      {k:"y",label:"Ano",type:"number"}
+    ], newItem:()=>({_id:newId(),n:"",c:"",ic:"🏆",d:"",y:new Date().getFullYear()})},
+  posts:{label:"Blog",icon:"📰",idField:"_id",
+    title:it=>it.t,
+    fields:[
+      {k:"t",label:"Título",type:"text",req:true},
+      {k:"c",label:"Categoria",type:"text"},
+      {k:"d",label:"Data (AAAA-MM-DD)",type:"text"},
+      {k:"ic",label:"Ícone (emoji)",type:"text"},
+      {k:"e",label:"Resumo",type:"textarea",req:true}
+    ], newItem:()=>({_id:newId(),t:"",c:"Novidades",d:new Date().toISOString().slice(0,10),ic:"📰",e:""})},
+  faq:{label:"FAQ",icon:"❓",idField:"_id",
+    title:it=>it.q,
+    fields:[
+      {k:"q",label:"Pergunta",type:"text",req:true},
+      {k:"a",label:"Resposta",type:"textarea",req:true}
+    ], newItem:()=>({_id:newId(),q:"",a:""})}
+};
+function newId(){return "x"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+
 function renderAdmin(){
   const cfg=getConfig();
   const wrap=document.getElementById("admWrap");
   if(!cfg.adminPass){renderAdminSetup(wrap);return}
   if(!adminLogged){renderAdminLogin(wrap);return}
+  const collTabs=Object.entries(COLLECTIONS).map(([key,c])=>
+    `<button class="adm-tab ${admTab===key?'active':''}" onclick="setAdmTab('${key}')">${c.icon} ${c.label} <span class="badge badge-line">${CONTENT[key].length}</span></button>`).join("");
   wrap.innerHTML=`
-    <div class="page-head" style="padding-top:40px"><h1>Painel Admin</h1><p>Configure pagamentos, contato e acompanhe pedidos.</p></div>
+    <div class="page-head" style="padding-top:40px"><h1>Painel Admin</h1><p>Configure literalmente o site inteiro por aqui — textos, produtos, seções e pagamentos.</p></div>
     <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="adminLogout()">Sair</button></div>
     <div class="adm-tabs">
-      <button class="adm-tab ${admTab==='config'?'active':''}" onclick="setAdmTab('config')">⚙️ Configurações</button>
+      <button class="adm-tab ${admTab==='config'?'active':''}" onclick="setAdmTab('config')">⚙️ Pagamentos</button>
+      <button class="adm-tab ${admTab==='site'?'active':''}" onclick="setAdmTab('site')">🎨 Conteúdo do site</button>
+      ${collTabs}
       <button class="adm-tab ${admTab==='pedidos'?'active':''}" onclick="setAdmTab('pedidos')">🧾 Pedidos <span class="badge badge-line">${getOrders().length}</span></button>
     </div>
-    <div class="adm-panel ${admTab==='config'?'active':''}" id="admPanelConfig"></div>
-    <div class="adm-panel ${admTab==='pedidos'?'active':''}" id="admPanelPedidos"></div>`;
-  if(admTab==="config")renderAdminConfig(cfg);else renderAdminOrders();
+    <div class="adm-panel active" id="admPanelBody"></div>`;
+  const body=document.getElementById("admPanelBody");
+  if(admTab==="config")renderAdminConfig(cfg,body);
+  else if(admTab==="site")renderAdminSite(body);
+  else if(admTab==="pedidos")renderAdminOrders(body);
+  else renderAdminCollection(admTab,body);
 }
 function setAdmTab(t){admTab=t;renderAdmin()}
 function renderAdminSetup(wrap){
@@ -1047,11 +1192,10 @@ function adminLoginSubmit(e){
 }
 function adminLogout(){adminLogged=false;sessionStorage.removeItem("sc-admin-session");go("home")}
 
-function renderAdminConfig(cfg){
-  document.getElementById("admPanelConfig").innerHTML=`
+function renderAdminConfig(cfg,body){
+  body.innerHTML=`
     <div class="adm-card glass">
-      <h4>🏪 Loja</h4>
-      <div class="field"><label>Nome da loja</label><input class="input" id="cfgStoreName" value="${cfg.storeName}"></div>
+      <h4>🏪 Contato</h4>
       <div class="field"><label>WhatsApp de suporte / confirmação de pagamento</label><input class="input" id="cfgWhatsapp" placeholder="Ex: 5531999999999" value="${cfg.whatsapp}">
         <div class="hint">Número com DDI+DDD, só números. Usado pro botão "Já paguei" avisar você.</div></div>
     </div>
@@ -1079,7 +1223,6 @@ function renderAdminConfig(cfg){
 }
 function saveAdminSettings(){
   const cfg=getConfig();
-  cfg.storeName=document.getElementById("cfgStoreName").value.trim()||cfg.storeName;
   cfg.whatsapp=document.getElementById("cfgWhatsapp").value.trim();
   cfg.pixKey=document.getElementById("cfgPixKey").value.trim();
   cfg.pixName=document.getElementById("cfgPixName").value.trim()||cfg.pixName;
@@ -1089,13 +1232,178 @@ function saveAdminSettings(){
   const newPass=document.getElementById("cfgNewPass").value;
   if(newPass)cfg.adminPass=newPass;
   saveConfig(cfg);
-  applyBranding();
   toast("Configurações salvas! 💾","ok");
 }
-function renderAdminOrders(){
+
+/* ═══════ ADMIN — CONTEÚDO DO SITE (hero, stats, depoimentos, rodapé, docs) ═══════ */
+function renderAdminSite(body){
+  const h=CONTENT.hero;
+  body.innerHTML=`
+    <div class="adm-card glass">
+      <h4>🏷️ Marca</h4>
+      <div class="field"><label>Nome da loja</label><input class="input" id="siteStoreName" value="${CONTENT.storeName}"></div>
+    </div>
+    <div class="adm-card glass">
+      <h4>🖼️ Seção Hero (topo da Home)</h4>
+      <div class="field"><label>Selo (badge acima do título)</label><input class="input" id="siteHeroBadge" value="${h.badge}"></div>
+      <div class="field-row">
+        <div class="field"><label>Título — linha 1</label><input class="input" id="siteHeroT1" value="${h.title1}"></div>
+        <div class="field"><label>Destaque — linha 1</label><input class="input" id="siteHeroH1" value="${h.highlight1}"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Título — linha 2</label><input class="input" id="siteHeroT2" value="${h.title2}"></div>
+        <div class="field"><label>Destaque — linha 2</label><input class="input" id="siteHeroH2" value="${h.highlight2}"></div>
+      </div>
+      <div class="field"><label>Descrição</label><textarea class="input" id="siteHeroDesc" rows="3">${h.desc}</textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Botão principal</label><input class="input" id="siteCtaPrimary" value="${h.ctaPrimary}"></div>
+        <div class="field"><label>Botão secundário</label><input class="input" id="siteCtaSecondary" value="${h.ctaSecondary}"></div>
+      </div>
+      <div class="field"><label>Título do banner de promoção</label><input class="input" id="siteBannerTitle" value="${h.bannerTitle}"></div>
+      <div class="field"><label>Descrição do banner</label><input class="input" id="siteBannerDesc" value="${h.bannerDesc}"></div>
+    </div>
+    <div class="adm-card glass">
+      <h4>📊 Estatísticas (4 números da Home)</h4>
+      ${CONTENT.stats.map((s,i)=>`<div class="field-row"><div class="field"><label>Valor ${i+1}</label><input class="input" id="siteStatVal${i}" value="${s.value}"></div><div class="field"><label>Rótulo ${i+1}</label><input class="input" id="siteStatLabel${i}" value="${s.label}"></div></div>`).join("")}
+      <div class="hint">Se o valor for só números, ele anima contando. Se tiver texto/símbolo (ex: 4.9★), aparece fixo.</div>
+    </div>
+    <div class="adm-card glass">
+      <h4>🦶 Rodapé</h4>
+      <div class="field"><label>Descrição da loja no rodapé</label><textarea class="input" id="siteFootDesc" rows="2">${CONTENT.footer.desc}</textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Link GitHub</label><input class="input" id="siteFootGithub" value="${CONTENT.footer.github}"></div>
+        <div class="field"><label>Link Discord</label><input class="input" id="siteFootDiscord" value="${CONTENT.footer.discord}"></div>
+      </div>
+      <div class="field"><label>Link YouTube</label><input class="input" id="siteFootYoutube" value="${CONTENT.footer.youtube}"></div>
+    </div>
+    <button class="btn btn-primary glow" style="width:100%" onclick="saveAdminSite()">Salvar conteúdo do site</button>
+    <div class="adm-card glass" style="margin-top:18px">
+      <h4>💬 Depoimentos</h4>
+      <div id="admTestiList"></div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="admTestiForm(null)">+ Adicionar depoimento</button>
+      <div id="admTestiForm"></div>
+    </div>
+    <div class="adm-card glass">
+      <h4>📖 Documentação</h4>
+      <div class="field"><label>Introdução (HTML)</label><textarea class="input" id="siteDocIntro" rows="4">${CONTENT.docs.intro}</textarea></div>
+      <div class="field"><label>Validação de Licenças (HTML)</label><textarea class="input" id="siteDocLic" rows="4">${CONTENT.docs.lic}</textarea></div>
+      <div class="field"><label>Instalação (HTML)</label><textarea class="input" id="siteDocInst" rows="4">${CONTENT.docs.inst}</textarea></div>
+      <div class="hint">Aceita tags HTML simples (ex: &lt;p&gt;, &lt;pre&gt;, &lt;b&gt;).</div>
+      <button class="btn btn-primary glow" style="width:100%;margin-top:10px" onclick="saveAdminDocs()">Salvar documentação</button>
+    </div>`;
+  renderAdmTestiList();
+}
+function saveAdminSite(){
+  CONTENT.storeName=document.getElementById("siteStoreName").value.trim()||CONTENT.storeName;
+  CONTENT.hero={
+    badge:document.getElementById("siteHeroBadge").value,
+    title1:document.getElementById("siteHeroT1").value, highlight1:document.getElementById("siteHeroH1").value,
+    title2:document.getElementById("siteHeroT2").value, highlight2:document.getElementById("siteHeroH2").value,
+    desc:document.getElementById("siteHeroDesc").value,
+    ctaPrimary:document.getElementById("siteCtaPrimary").value, ctaSecondary:document.getElementById("siteCtaSecondary").value,
+    bannerTitle:document.getElementById("siteBannerTitle").value, bannerDesc:document.getElementById("siteBannerDesc").value
+  };
+  CONTENT.stats=CONTENT.stats.map((s,i)=>({value:document.getElementById("siteStatVal"+i).value,label:document.getElementById("siteStatLabel"+i).value}));
+  CONTENT.footer={
+    desc:document.getElementById("siteFootDesc").value,
+    github:document.getElementById("siteFootGithub").value||"#",
+    discord:document.getElementById("siteFootDiscord").value||"#",
+    youtube:document.getElementById("siteFootYoutube").value||"#"
+  };
+  saveContent();refreshPublicContent();
+  toast("Conteúdo do site salvo! 💾","ok");
+}
+function saveAdminDocs(){
+  CONTENT.docs={intro:document.getElementById("siteDocIntro").value,lic:document.getElementById("siteDocLic").value,inst:document.getElementById("siteDocInst").value};
+  saveContent();refreshPublicContent();
+  toast("Documentação salva! 💾","ok");
+}
+function renderAdmTestiList(){
+  document.getElementById("admTestiList").innerHTML=CONTENT.testimonials.length?CONTENT.testimonials.map((t,i)=>`
+    <div class="ord-row glass"><div class="oi"><b>${t.name}</b><span>${t.role} — "${t.text.slice(0,50)}${t.text.length>50?'…':''}"</span></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" onclick="admTestiForm(${i})">Editar</button><button class="icon-btn" onclick="admTestiDelete(${i})">🗑</button></div></div>`).join("")
+    :'<p class="muted">Nenhum depoimento ainda.</p>';
+  document.getElementById("admTestiForm").innerHTML="";
+}
+function admTestiForm(i){
+  const t=i===null?{text:"",name:"",role:""}:CONTENT.testimonials[i];
+  document.getElementById("admTestiForm").innerHTML=`
+    <div class="adm-card glass" style="margin-top:12px">
+      <div class="field"><label>Depoimento</label><textarea class="input" id="tfText" rows="2">${t.text}</textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Nome</label><input class="input" id="tfName" value="${t.name}"></div>
+        <div class="field"><label>Cargo/contexto</label><input class="input" id="tfRole" value="${t.role}"></div>
+      </div>
+      <div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" onclick="admTestiSave(${i===null?"null":i})">Salvar</button><button class="btn btn-ghost btn-sm" onclick="document.getElementById('admTestiForm').innerHTML=''">Cancelar</button></div>
+    </div>`;
+}
+function admTestiSave(i){
+  const item={text:document.getElementById("tfText").value.trim(),name:document.getElementById("tfName").value.trim(),role:document.getElementById("tfRole").value.trim()};
+  if(!item.text||!item.name)return toast("Preencha nome e depoimento.","err");
+  if(i===null)CONTENT.testimonials.push(item);else CONTENT.testimonials[i]=item;
+  saveContent();refreshPublicContent();renderAdmTestiList();toast("Depoimento salvo! 💾","ok");
+}
+function admTestiDelete(i){CONTENT.testimonials.splice(i,1);saveContent();refreshPublicContent();renderAdmTestiList()}
+
+/* ═══════ ADMIN — COLEÇÕES (produtos, recursos, programas, apps, parceiros, projetos, blog, faq) ═══════ */
+function renderAdminCollection(key,body){
+  const c=COLLECTIONS[key];
+  body.innerHTML=`<div id="admCollList"></div><button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="admCollForm('${key}',null)">+ Adicionar ${c.label.toLowerCase()}</button><div id="admCollForm"></div>`;
+  renderAdmCollList(key);
+}
+function renderAdmCollList(key){
+  const c=COLLECTIONS[key], arr=CONTENT[key];
+  document.getElementById("admCollList").innerHTML=arr.length?arr.map(it=>`
+    <div class="ord-row glass"><div class="oi"><b>${it.ic?it.ic+" ":""}${c.title(it)}</b></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" onclick="admCollForm('${key}','${it[c.idField]}')">Editar</button><button class="icon-btn" onclick="admCollDelete('${key}','${it[c.idField]}')">🗑</button></div></div>`).join("")
+    :`<p class="muted">Nada em ${c.label.toLowerCase()} ainda.</p>`;
+  document.getElementById("admCollForm").innerHTML="";
+}
+function admCollForm(key,id){
+  const c=COLLECTIONS[key];
+  const item=id===null?c.newItem():CONTENT[key].find(it=>String(it[c.idField])===String(id));
+  const fieldsHtml=c.fields.map(f=>{
+    const val=item[f.k];
+    const fid=`cf_${f.k}`;
+    if(f.type==="textarea")return `<div class="field"><label>${f.label}</label><textarea class="input" id="${fid}" rows="3">${val??""}</textarea></div>`;
+    if(f.type==="select")return `<div class="field"><label>${f.label}</label><select class="input" id="${fid}">${f.options.map(o=>`<option value="${o}" ${val===o?"selected":""}>${o}</option>`).join("")}</select></div>`;
+    if(f.type==="tags")return `<div class="field"><label>${f.label}</label><input class="input" id="${fid}" value="${(val||[]).join(", ")}">${f.hint?`<div class="hint">${f.hint}</div>`:""}</div>`;
+    if(f.type==="number")return `<div class="field"><label>${f.label}</label><input class="input" type="number" step="${f.step||"1"}" id="${fid}" value="${val??""}">${f.hint?`<div class="hint">${f.hint}</div>`:""}</div>`;
+    return `<div class="field"><label>${f.label}</label><input class="input" id="${fid}" value="${val??""}">${f.hint?`<div class="hint">${f.hint}</div>`:""}</div>`;
+  }).join("");
+  document.getElementById("admCollForm").innerHTML=`
+    <div class="adm-card glass" style="margin-top:12px">
+      <h4>${id===null?"Adicionar":"Editar"} — ${c.label}</h4>
+      ${fieldsHtml}
+      <div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" onclick="admCollSave('${key}',${id===null?"null":`'${id}'`})">Salvar</button><button class="btn btn-ghost btn-sm" onclick="document.getElementById('admCollForm').innerHTML=''">Cancelar</button></div>
+    </div>`;
+}
+function admCollSave(key,id){
+  const c=COLLECTIONS[key];
+  const item=id===null?c.newItem():{...CONTENT[key].find(it=>String(it[c.idField])===String(id))};
+  for(const f of c.fields){
+    const el=document.getElementById("cf_"+f.k);
+    let v=el.value;
+    if(f.type==="number")v=v===""?null:+v;
+    if(f.type==="tags")v=v.split(",").map(s=>s.trim()).filter(Boolean);
+    if(f.req&&(v===""||v===null))return toast(`Preencha o campo "${f.label}".`,"err");
+    item[f.k]=v;
+  }
+  if(id===null)CONTENT[key].push(item);
+  else{const idx=CONTENT[key].findIndex(it=>String(it[c.idField])===String(id));CONTENT[key][idx]=item}
+  saveContent();refreshPublicContent();renderAdmCollList(key);renderAdmin();
+  toast("Salvo! 💾","ok");
+}
+function admCollDelete(key,id){
+  const c=COLLECTIONS[key];
+  CONTENT[key]=CONTENT[key].filter(it=>String(it[c.idField])!==String(id));
+  saveContent();refreshPublicContent();renderAdmCollList(key);renderAdmin();
+}
+
+function renderAdminOrders(body){
   const orders=getOrders();
   const stMap={aguardando:["Aguardando pagamento","st-wait"],aguardando_confirmacao:["Em análise","st-wait"],pago:["Entregue","st-paid"],cancelado:["Cancelado","st-cancel"]};
-  document.getElementById("admPanelPedidos").innerHTML=orders.length?orders.map(o=>{
+  body.innerHTML=orders.length?orders.map(o=>{
     const[label,cls]=stMap[o.status]||stMap.aguardando;
     return `<div class="ord-row glass">
       <div class="oi"><b>${o.id} · ${fmt(o.total)}</b><span>${o.items.map(i=>i.name).join(", ")} · ${new Date(o.createdAt).toLocaleString("pt-BR")}</span></div>
@@ -1107,12 +1415,15 @@ function renderAdminOrders(){
       </div></div>`;
   }).join(""):'<p class="muted">Nenhum pedido ainda.</p>';
 }
-function setOrderStatus(id,status){saveOrders(updateOrderStatus(id,status));renderAdminOrders();renderAccount();toast("Pedido atualizado.","ok")}
-function deleteOrder(id){saveOrders(getOrders().filter(o=>o.id!==id));renderAdminOrders();renderAccount()}
+function setOrderStatus(id,status){saveOrders(updateOrderStatus(id,status));renderAdmin();renderAccount();toast("Pedido atualizado.","ok")}
+function deleteOrder(id){saveOrders(getOrders().filter(o=>o.id!==id));renderAdmin();renderAccount()}
+
 
 /* ═══════════════════ SEÇÕES ═══════════════════ */
 function renderResources(){
-  document.getElementById("resChips").innerHTML=RES_CATS.map(c=>`<button class="chip ${c===resCat?"active":""}" style="width:auto;display:inline-block" onclick="setResCat(this,'${c}')"># ${c}</button>`).join("");
+  const resCats=["Todos",...new Set(RESOURCES.map(r=>r.c))];
+  if(resCat!=="Todos"&&!resCats.includes(resCat))resCat="Todos";
+  document.getElementById("resChips").innerHTML=resCats.map(c=>`<button class="chip ${c===resCat?"active":""}" style="width:auto;display:inline-block" onclick="setResCat(this,'${c}')"># ${c}</button>`).join("");
   const list=RESOURCES.filter(r=>resCat==="Todos"||r.c===resCat);
   document.getElementById("resGrid").innerHTML=list.map(r=>`
     <div class="card-p glass reveal"><div class="body">
@@ -1187,7 +1498,8 @@ function docTab(el,key){
   el.classList.add("active");document.getElementById("docContent").innerHTML=DOCS[key];
 }
 function renderMarquee(){
-  const items=[...PART,...PART].map(p=>`<span>${p}</span>`).join("");
+  const names=PARTNERS.map(p=>p.n);
+  const items=[...names,...names].map(p=>`<span>${p}</span>`).join("");
   document.getElementById("mtrack").innerHTML=items;
 }
 
@@ -1248,9 +1560,10 @@ document.addEventListener("keydown",e=>{
 window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(h&&document.getElementById("view-"+h))go(h)});
 
 /* ═══════════════════ INIT ═══════════════════ */
+renderBrandContent();
 buildNav();renderHome();buildCats();renderShop();renderResources();renderPrograms();
 renderApps();renderPartners();renderProjects();renderDownloads();renderBlog();renderFaq();
-renderMarquee();updateCart();renderAccount();applyBranding();document.getElementById("docContent").innerHTML=DOCS.intro;
+renderMarquee();updateCart();renderAccount();document.getElementById("docContent").innerHTML=DOCS.intro;
 const startHash=location.hash.slice(1);if(startHash&&document.getElementById("view-"+startHash))go(startHash);
 observeReveals();
 </script>
