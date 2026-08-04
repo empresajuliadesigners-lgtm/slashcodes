@@ -8,6 +8,86 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- ═══════════════════ FIREBASE ═══════════════════
+  1) Preencha SEU_FIREBASE_CONFIG abaixo com as chaves do seu projeto
+     (Firebase Console → ⚙️ Configurações do projeto → Geral → Seus apps → SDK).
+  2) Ative no Console: Firestore Database, Authentication (método Email/Senha)
+     e Vertex AI/Gemini API dentro de "Build → AI Logic".
+  3) Crie o usuário admin manualmente em Authentication → Users → Add user
+     (email + senha). Não existe cadastro público — só esse usuário entra no painel.
+  Enquanto as chaves não forem preenchidas, o site funciona 100% como antes
+  (guardando tudo no navegador). Assim que preencher, ele passa a sincronizar
+  tudo (conteúdo, pedidos, admin) num banco de dados real.
+-->
+<script>
+  window.SEU_FIREBASE_CONFIG = {
+    apiKey: "COLE_AQUI_SUA_API_KEY",
+    authDomain: "SEU_PROJETO.firebaseapp.com",
+    projectId: "SEU_PROJETO",
+    storageBucket: "SEU_PROJETO.appspot.com",
+    messagingSenderId: "SEU_SENDER_ID",
+    appId: "SEU_APP_ID"
+  };
+  // Promessa que o script principal aguarda antes de carregar dados.
+  window.fbReady = new Promise(resolve => { window.__fbReadyResolve = resolve; });
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot,
+    collection, query, orderBy
+  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+  import {
+    getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  const cfg = window.SEU_FIREBASE_CONFIG;
+  const isConfigured = cfg && cfg.apiKey && !cfg.apiKey.includes("COLE_AQUI");
+
+  if (!isConfigured) {
+    window.FB = { enabled: false };
+    window.__fbReadyResolve(false);
+  } else {
+    try {
+      const app = initializeApp(cfg);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+
+      // IA (Gemini via Firebase AI Logic) — importado só quando configurado, pra não
+      // quebrar o site em navegadores/projetos sem essa lib disponível.
+      let aiModel = null;
+      (async () => {
+        try {
+          const { getAI, getGenerativeModel, GoogleAIBackend } =
+            await import("https://www.gstatic.com/firebasejs/10.14.1/firebase-ai.js");
+          const ai = getAI(app, { backend: new GoogleAIBackend() });
+          aiModel = getGenerativeModel(ai, { model: "gemini-2.5-flash" });
+        } catch (e) { console.warn("Firebase AI indisponível:", e); }
+      })();
+
+      window.FB = {
+        enabled: true,
+        db, auth,
+        doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, orderBy,
+        signIn: (email, pass) => signInWithEmailAndPassword(auth, email, pass),
+        signOutNow: () => signOut(auth),
+        onAuth: (cb) => onAuthStateChanged(auth, cb),
+        aiGenerate: async (prompt) => {
+          if (!aiModel) throw new Error("IA ainda carregando, tente novamente em instantes.");
+          const res = await aiModel.generateContent(prompt);
+          return res.response.text();
+        }
+      };
+      window.__fbReadyResolve(true);
+    } catch (e) {
+      console.error("Erro ao iniciar Firebase:", e);
+      window.FB = { enabled: false };
+      window.__fbReadyResolve(false);
+    }
+  }
+</script>
+
 <style>
   /* ═══════════ DESIGN SYSTEM ═══════════ */
   :root{
@@ -724,7 +804,14 @@ function getContent(){
   const saved=JSON.parse(localStorage.getItem("sc-content")||"null");
   return saved?{...CONTENT_DEFAULT,...saved}:JSON.parse(JSON.stringify(CONTENT_DEFAULT));
 }
-function saveContent(){localStorage.setItem("sc-content",JSON.stringify(CONTENT))}
+function saveContent(){
+  localStorage.setItem("sc-content",JSON.stringify(CONTENT));
+  if(window.FB&&FB.enabled){
+    FB.setDoc(FB.doc(FB.db,"store","content"),CONTENT).catch(err=>{
+      console.error(err);toast("Salvo neste navegador, mas falhou ao sincronizar com o Firebase (verifique conexão/regras).","err");
+    });
+  }
+}
 let CONTENT=getContent();
 let PRODUCTS=CONTENT.products, RESOURCES=CONTENT.resources, PROGRAMS=CONTENT.programs,
     APPS=CONTENT.apps, PARTNERS=CONTENT.partners, PROJECTS=CONTENT.projects,
@@ -745,11 +832,21 @@ const CONFIG_DEFAULT={
   whatsapp:"",
   pixKey:"", pixName:"SLASH CODES", pixCity:"SAO PAULO",
   mpEnabled:false, mpBackendUrl:"/api/create-preference",
-  adminPass:""
+  adminPass:"" /* usado só no modo sem Firebase (fallback) */
 };
 function getConfig(){return {...CONFIG_DEFAULT,...JSON.parse(localStorage.getItem("sc-config")||"{}")}}
-function saveConfig(cfg){localStorage.setItem("sc-config",JSON.stringify(cfg))}
+function saveConfig(cfg){
+  localStorage.setItem("sc-config",JSON.stringify(cfg));
+  if(window.FB&&FB.enabled){
+    const {adminPass,...cloudCfg}=cfg; // senha nunca vai pro Firestore — quem manda é o Firebase Auth
+    FB.setDoc(FB.doc(FB.db,"store","config"),cloudCfg).catch(err=>{
+      console.error(err);toast("Salvo neste navegador, mas falhou ao sincronizar com o Firebase.","err");
+    });
+  }
+}
+/* login do admin: com Firebase = sessão do Firebase Auth; sem Firebase = senha local (fallback) */
 let adminLogged=sessionStorage.getItem("sc-admin-session")==="1";
+let fbAuthReady=false;
 function applyBranding(){
   document.title=CONTENT.storeName+" — Produtos Digitais Premium";
   document.querySelectorAll("#logoText,#footLogoText").forEach(el=>el.textContent=CONTENT.storeName);
@@ -790,10 +887,23 @@ function refreshPublicContent(){
 }
 
 /* ═══════════════════ PEDIDOS ═══════════════════ */
-function getOrders(){return JSON.parse(localStorage.getItem("sc-orders")||"[]")}
-function saveOrders(list){localStorage.setItem("sc-orders",JSON.stringify(list))}
-function addOrder(order){const list=getOrders();list.unshift(order);saveOrders(list);return order}
-function updateOrderStatus(id,status){const list=getOrders();const o=list.find(x=>x.id===id);if(o)o.status=status;saveOrders(list);return list}
+let ORDERS_CACHE=JSON.parse(localStorage.getItem("sc-orders")||"[]");
+function getOrders(){return ORDERS_CACHE}
+function saveOrders(list){ORDERS_CACHE=list;localStorage.setItem("sc-orders",JSON.stringify(list))}
+function addOrder(order){
+  const list=getOrders();list.unshift(order);saveOrders(list);
+  if(window.FB&&FB.enabled){
+    FB.setDoc(FB.doc(FB.db,"orders",order.id),order).catch(err=>console.error("Falha ao salvar pedido no Firebase:",err));
+  }
+  return order;
+}
+function updateOrderStatus(id,status){
+  const list=getOrders();const o=list.find(x=>x.id===id);if(o)o.status=status;saveOrders(list);
+  if(window.FB&&FB.enabled){
+    FB.updateDoc(FB.doc(FB.db,"orders",id),{status}).catch(err=>console.error("Falha ao atualizar pedido no Firebase:",err));
+  }
+  return list;
+}
 
 /* ═══════════════════ NAVEGAÇÃO ═══════════════════ */
 function buildNav(){
@@ -1131,13 +1241,24 @@ function newId(){return "x"+Date.now().toString(36)+Math.random().toString(36).s
 function renderAdmin(){
   const cfg=getConfig();
   const wrap=document.getElementById("admWrap");
-  if(!cfg.adminPass){renderAdminSetup(wrap);return}
-  if(!adminLogged){renderAdminLogin(wrap);return}
+  const fbOn=window.FB&&FB.enabled;
+
+  if(fbOn){
+    if(!fbAuthReady){wrap.innerHTML=`<div class="adm-gate glass-strong"><div class="ic">⏳</div><h2>Carregando…</h2><p class="muted" style="margin-top:6px;font-size:13px">Conectando ao Firebase.</p></div>`;return}
+    if(!adminLogged){renderAdminLogin(wrap,true);return}
+  }else{
+    if(!cfg.adminPass){renderAdminSetup(wrap);return}
+    if(!adminLogged){renderAdminLogin(wrap,false);return}
+  }
+
   const collTabs=Object.entries(COLLECTIONS).map(([key,c])=>
     `<button class="adm-tab ${admTab===key?'active':''}" onclick="setAdmTab('${key}')">${c.icon} ${c.label} <span class="badge badge-line">${CONTENT[key].length}</span></button>`).join("");
   wrap.innerHTML=`
     <div class="page-head" style="padding-top:40px"><h1>Painel Admin</h1><p>Configure literalmente o site inteiro por aqui — textos, produtos, seções e pagamentos.</p></div>
-    <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn btn-ghost btn-sm" onclick="adminLogout()">Sair</button></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap">
+      <span class="badge ${fbOn?'badge-green':'badge-amber'}">${fbOn?'🔥 Sincronizado com Firebase':'💾 Somente neste navegador (Firebase não configurado)'}</span>
+      <button class="btn btn-ghost btn-sm" onclick="adminLogout()">Sair</button>
+    </div>
     <div class="adm-tabs">
       <button class="adm-tab ${admTab==='config'?'active':''}" onclick="setAdmTab('config')">⚙️ Pagamentos</button>
       <button class="adm-tab ${admTab==='site'?'active':''}" onclick="setAdmTab('site')">🎨 Conteúdo do site</button>
@@ -1152,12 +1273,14 @@ function renderAdmin(){
   else renderAdminCollection(admTab,body);
 }
 function setAdmTab(t){admTab=t;renderAdmin()}
+
+/* ── Fallback sem Firebase (senha local) — some assim que as chaves forem preenchidas ── */
 function renderAdminSetup(wrap){
   wrap.innerHTML=`
     <div class="adm-gate glass-strong">
       <div class="ic">🔐</div>
       <h2>Configurar acesso Admin</h2>
-      <p class="muted" style="margin-top:6px;font-size:13px">Crie uma senha pra proteger o painel administrativo (fica salva só neste navegador).</p>
+      <p class="muted" style="margin-top:6px;font-size:13px">Crie uma senha pra proteger o painel administrativo (fica salva só neste navegador — configure o Firebase pra ter login de verdade e dados sincronizados).</p>
       <form style="margin-top:20px;display:flex;flex-direction:column;gap:10px" onsubmit="adminSetupSubmit(event)">
         <input class="input" type="password" id="admNewPass" placeholder="Nova senha" required minlength="4">
         <button class="btn btn-primary" type="submit" style="width:100%">Criar senha e entrar</button>
@@ -1171,26 +1294,47 @@ function adminSetupSubmit(e){
   adminLogged=true;sessionStorage.setItem("sc-admin-session","1");
   toast("Senha criada! Bem-vinda ao painel 👋","ok");renderAdmin();
 }
-function renderAdminLogin(wrap){
+
+function renderAdminLogin(wrap,fbOn){
   wrap.innerHTML=`
     <div class="adm-gate glass-strong">
       <div class="ic">🔒</div>
       <h2>Área restrita</h2>
-      <p class="muted" style="margin-top:6px;font-size:13px">Digite a senha do painel administrativo.</p>
-      <form style="margin-top:20px;display:flex;flex-direction:column;gap:10px" onsubmit="adminLoginSubmit(event)">
-        <input class="input" type="password" id="admLoginPass" placeholder="Senha" required>
+      <p class="muted" style="margin-top:6px;font-size:13px">${fbOn?"Entre com o e-mail e senha criados no Firebase Authentication.":"Digite a senha do painel administrativo."}</p>
+      <form style="margin-top:20px;display:flex;flex-direction:column;gap:10px" onsubmit="adminLoginSubmit(event,${fbOn})">
+        ${fbOn?'<input class="input" type="email" id="admLoginEmail" placeholder="E-mail" required autocomplete="username">':''}
+        <input class="input" type="password" id="admLoginPass" placeholder="Senha" required autocomplete="current-password">
         <button class="btn btn-primary" type="submit" style="width:100%">Entrar</button>
       </form>
+      ${fbOn?'<p class="muted" style="margin-top:14px;font-size:11px;line-height:1.5">Sem usuário ainda? Crie um em Firebase Console → Authentication → Users → Add user.</p>':''}
     </div>`;
 }
-function adminLoginSubmit(e){
+async function adminLoginSubmit(e,fbOn){
   e.preventDefault();
+  if(fbOn){
+    const email=document.getElementById("admLoginEmail").value.trim();
+    const pass=document.getElementById("admLoginPass").value;
+    const btn=e.target.querySelector("button");btn.disabled=true;btn.textContent="Entrando…";
+    try{
+      await FB.signIn(email,pass);
+      // onAuth listener cuida de adminLogged=true e re-render
+    }catch(err){
+      console.error(err);
+      toast("E-mail ou senha incorretos.","err");
+      btn.disabled=false;btn.textContent="Entrar";
+    }
+    return;
+  }
   const pass=document.getElementById("admLoginPass").value;
   const cfg=getConfig();
   if(pass===cfg.adminPass){adminLogged=true;sessionStorage.setItem("sc-admin-session","1");renderAdmin()}
   else toast("Senha incorreta.","err");
 }
-function adminLogout(){adminLogged=false;sessionStorage.removeItem("sc-admin-session");go("home")}
+function adminLogout(){
+  adminLogged=false;sessionStorage.removeItem("sc-admin-session");
+  if(window.FB&&FB.enabled)FB.signOutNow().catch(()=>{});
+  go("home");
+}
 
 function renderAdminConfig(cfg,body){
   body.innerHTML=`
@@ -1215,10 +1359,15 @@ function renderAdminConfig(cfg,body){
       <div class="field"><label>URL da function de criação de preferência</label><input class="input" id="cfgMpUrl" value="${cfg.mpBackendUrl}"></div>
       <div class="hint">Precisa de uma function backend (Vercel/Netlify) com o MP_ACCESS_TOKEN configurado. Sem isso, o site usa PIX automaticamente.</div>
     </div>
+    ${(window.FB&&FB.enabled)?`
+    <div class="adm-card glass">
+      <h4>🔑 Segurança</h4>
+      <p class="muted" style="font-size:13px">Login gerenciado pelo Firebase Authentication. Pra trocar a senha ou adicionar outro admin, use o Firebase Console → Authentication → Users.</p>
+    </div>`:`
     <div class="adm-card glass">
       <h4>🔑 Segurança</h4>
       <div class="field"><label>Nova senha do admin (deixe em branco pra manter)</label><input class="input" type="password" id="cfgNewPass" placeholder="••••••"></div>
-    </div>
+    </div>`}
     <button class="btn btn-primary glow" style="width:100%" onclick="saveAdminSettings()">Salvar configurações</button>`;
 }
 function saveAdminSettings(){
@@ -1229,8 +1378,8 @@ function saveAdminSettings(){
   cfg.pixCity=document.getElementById("cfgPixCity").value.trim()||cfg.pixCity;
   cfg.mpEnabled=document.getElementById("cfgMpSwitch").classList.contains("on");
   cfg.mpBackendUrl=document.getElementById("cfgMpUrl").value.trim();
-  const newPass=document.getElementById("cfgNewPass").value;
-  if(newPass)cfg.adminPass=newPass;
+  const newPassEl=document.getElementById("cfgNewPass");
+  if(newPassEl&&newPassEl.value)cfg.adminPass=newPassEl.value;
   saveConfig(cfg);
   toast("Configurações salvas! 💾","ok");
 }
